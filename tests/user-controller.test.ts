@@ -1,6 +1,6 @@
 // tests/user-controller.test.ts
 import {test, expect} from '@playwright/test';
-
+import { StatusCodes } from 'http-status-codes';
 let baseURL: string = 'http://localhost:3000/users';
 
 test.describe('User management API', () => {
@@ -27,21 +27,19 @@ test.describe('User management API', () => {
         const userCreated = await createResponse.json();
         const userID = userCreated.id;
         const response = await request.get(`${baseURL}/${userID}`);
-        console.log(await response.text());
-        expect(response.status()).toBe(200)
+        expect(response.status()).toBe(StatusCodes.OK)
     });
 
     test('find user: should return 404 if user not found', async ({request}) => {
         const response = await request.get(`${baseURL}/101`);
-        expect(response.status()).toBe(404)
+        expect(response.status()).toBe(StatusCodes.NOT_FOUND)
 
-        // always more then 100, id>100
+        // always more than 100, id>100
     });
 
     test('create user: should add a new user', async ({request}) => {
         const createResponse = await request.post(`${baseURL}`);
-        console.log(createResponse.status());
-        expect(createResponse.status()).toBe(201);
+        expect(createResponse.status()).toBe(StatusCodes.CREATED);
     });
 
     test('delete user: should delete a user by ID', async ({request}) => {
@@ -49,14 +47,14 @@ test.describe('User management API', () => {
         const userCreated = await createResponse.json();
         const userID = userCreated.id;
         const deleteCreated = await request.delete(`${baseURL}/${userID}`);
-        expect(deleteCreated.status()).toBe(200);
+        expect(deleteCreated.status()).toBe(StatusCodes.OK);
         const getResponse = await request.get(`${baseURL}/${userID}`);
-        expect(getResponse.status()).toBe(404);
+        expect(getResponse.status()).toBe(StatusCodes.NOT_FOUND);
     });
 
     test('delete user: should return 404 if user not found', async ({request}) => {
         const response = await request.delete(`${baseURL}/101`);
-        expect(response.status()).toBe(404)
+        expect(response.status()).toBe(StatusCodes.NOT_FOUND)
     });
 
 

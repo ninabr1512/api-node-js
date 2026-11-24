@@ -1,7 +1,5 @@
 // tests/user-controller.test.ts
 import {test, expect} from '@playwright/test';
-import {id_ID} from "@faker-js/faker";
-import {ok} from "node:assert";
 
 let baseURL: string = 'http://localhost:3000/users';
 
